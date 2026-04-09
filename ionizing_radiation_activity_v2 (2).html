@@ -1,0 +1,2011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Types of Ionizing Radiation  to  Learning Activity</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap');
+
+  :root {
+    --bg: #0f1623;
+    --surface: #172030;
+    --panel: #1c2a40;
+    --border: #2e4060;
+    --accent-alpha: #38bdf8;
+    --accent-beta: #fb923c;
+    --accent-gamma: #c084fc;
+    --accent-neutron: #4ade80;
+    --text: #f0f4f8;
+    --text-dim: #b8c5d6;
+    --correct: #4ade80;
+    --wrong: #f87171;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  /* Animated starfield background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      radial-gradient(1px 1px at 20% 30%, rgba(0,198,255,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 80% 10%, rgba(168,85,247,0.4) 0%, transparent 100%),
+      radial-gradient(1px 1px at 50% 80%, rgba(255,107,53,0.3) 0%, transparent 100%),
+      radial-gradient(1px 1px at 10% 70%, rgba(34,197,94,0.3) 0%, transparent 100%);
+    animation: starPulse 8s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes starPulse {
+    0% { opacity: 0.5; }
+    100% { opacity: 1; }
+  }
+
+  /* Scanner lines */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,198,255,0.015) 2px, rgba(0,198,255,0.015) 4px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    z-index: 1;
+    width: min(900px, 95vw);
+    min-height: 560px;
+  }
+
+  /* Progress bar */
+  .progress-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+
+  .progress-bar {
+    flex: 1;
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-alpha), var(--accent-gamma));
+    border-radius: 2px;
+    transition: width 0.6s cubic-bezier(0.4,0,0.2,1);
+    box-shadow: 0 0 8px rgba(0,198,255,0.6);
+  }
+
+  .progress-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    white-space: nowrap;
+  }
+
+  .slide {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 40px 48px;
+    min-height: 480px;
+    display: none;
+    flex-direction: column;
+    animation: slideIn 0.5s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide.active { display: flex; }
+
+  .slide::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-alpha), var(--accent-gamma), var(--accent-beta));
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .slide-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent-alpha);
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .slide-tag::before {
+    content: '';
+    width: 20px; height: 1px;
+    background: var(--accent-alpha);
+  }
+
+  h1 {
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 800;
+    line-height: 1.15;
+    margin-bottom: 16px;
+    letter-spacing: -0.5px;
+  }
+
+  h2 {
+    font-size: clamp(20px, 3vw, 28px);
+    font-weight: 800;
+    margin-bottom: 20px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+    color: var(--text-dim);
+    line-height: 1.6;
+    margin-bottom: 32px;
+    max-width: 580px;
+  }
+
+  /* Radiation type cards */
+  .radiation-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    flex: 1;
+  }
+
+  .rad-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rad-card:hover {
+    transform: translateY(-2px);
+    border-color: var(--card-color);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3), 0 0 0 1px var(--card-color);
+  }
+
+  .rad-card::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, var(--card-color) 0%, transparent 60%);
+    opacity: 0.06;
+    transition: opacity 0.3s;
+  }
+
+  .rad-card:hover::after { opacity: 0.12; }
+
+  .rad-card.alpha { --card-color: var(--accent-alpha); }
+  .rad-card.beta  { --card-color: var(--accent-beta); }
+  .rad-card.gamma { --card-color: var(--accent-gamma); }
+  .rad-card.neutron { --card-color: var(--accent-neutron); }
+
+  .card-icon {
+    font-size: 32px;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .card-title {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 4px;
+    color: var(--card-color);
+  }
+
+  .card-symbol {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+
+  .card-desc {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* Detail slide */
+  .detail-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 24px;
+    margin-bottom: 28px;
+  }
+
+  .detail-icon-bg {
+    width: 72px; height: 72px;
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    flex-shrink: 0;
+    border: 1px solid;
+  }
+
+  .detail-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .stat-box {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px;
+  }
+
+  .stat-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+
+  .stat-value {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* Penetration diagram */
+  .penetration-diagram {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .pen-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 16px;
+  }
+
+  .pen-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .pen-label {
+    font-weight: 700;
+    font-size: 13px;
+    width: 70px;
+    flex-shrink: 0;
+  }
+
+  .pen-bar-container {
+    flex: 1;
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .pen-bar {
+    height: 24px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    font-weight: 700;
+    color: rgba(0,0,0,0.7);
+    transition: width 1s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  .barrier {
+    background: var(--border);
+    border-radius: 4px;
+    height: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 9px;
+    color: var(--text-dim);
+    padding: 2px 6px;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  /* Quiz slide */
+  .quiz-question {
+    font-size: 18px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin-bottom: 28px;
+    padding: 20px;
+    background: var(--panel);
+    border-radius: 12px;
+    border-left: 4px solid var(--accent-alpha);
+  }
+
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+  }
+
+  .quiz-option {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    user-select: none;
+  }
+
+  .quiz-option:hover:not(.disabled) {
+    border-color: var(--accent-alpha);
+    background: rgba(0,198,255,0.05);
+  }
+
+  .quiz-option.correct {
+    border-color: var(--correct);
+    background: rgba(34,197,94,0.1);
+    color: var(--correct);
+  }
+
+  .quiz-option.wrong {
+    border-color: var(--wrong);
+    background: rgba(239,68,68,0.1);
+    color: var(--wrong);
+  }
+
+  .quiz-option.disabled { cursor: default; }
+
+  .option-letter {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    font-weight: 700;
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.25s;
+  }
+
+  .quiz-option.correct .option-letter { background: var(--correct); color: #000; }
+  .quiz-option.wrong .option-letter { background: var(--wrong); color: #fff; }
+
+  .feedback-box {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .feedback-box.show { display: block; }
+  .feedback-box.correct-fb { background: rgba(34,197,94,0.1); border: 1px solid var(--correct); color: var(--correct); }
+  .feedback-box.wrong-fb { background: rgba(239,68,68,0.1); border: 1px solid var(--wrong); color: var(--wrong); }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* Drag and drop */
+  .drag-area {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+  }
+
+  .drag-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+
+  .drag-chip {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: grab;
+    transition: all 0.2s;
+    user-select: none;
+  }
+
+  .drag-chip:active { cursor: grabbing; opacity: 0.7; }
+  .drag-chip.dragging { opacity: 0.4; }
+
+  .drop-targets {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .drop-target {
+    background: var(--panel);
+    border: 2px dashed var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    min-height: 52px;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .drop-target.drag-over { border-color: var(--accent-alpha); background: rgba(0,198,255,0.05); }
+  .drop-target.correct-drop { border-color: var(--correct); border-style: solid; }
+  .drop-target.wrong-drop { border-color: var(--wrong); border-style: solid; }
+
+  .drop-label {
+    font-size: 12px;
+    color: var(--text-dim);
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Nav buttons */
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    padding: 12px 28px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent-alpha), #0099cc);
+    color: #000;
+    box-shadow: 0 0 20px rgba(0,198,255,0.3);
+  }
+
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 24px rgba(0,198,255,0.5); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--text-dim);
+    border: 1px solid var(--border);
+  }
+
+  .btn-ghost:hover { border-color: var(--text-dim); color: var(--text); }
+
+  /* Score screen */
+  .score-display {
+    font-size: 80px;
+    font-weight: 800;
+    text-align: center;
+    background: linear-gradient(135deg, var(--accent-alpha), var(--accent-gamma));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 16px 0;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .score-bar-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin: 24px 0;
+  }
+
+  .score-item {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .score-num {
+    font-size: 28px;
+    font-weight: 800;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .score-desc { font-size: 12px; color: var(--text-dim); margin-top: 4px; }
+
+  /* Objective checklist */
+  .objectives {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+
+  .obj-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    color: var(--text-dim);
+    padding: 12px 16px;
+    background: var(--panel);
+    border-radius: 8px;
+    border: 1px solid var(--border);
+  }
+
+  .obj-check {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: rgba(0,198,255,0.15);
+    border: 1px solid var(--accent-alpha);
+    color: var(--accent-alpha);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+
+  /* Tooltip */
+  .tooltip-term {
+    color: var(--accent-alpha);
+    border-bottom: 1px dashed var(--accent-alpha);
+    cursor: help;
+    position: relative;
+  }
+
+  /* Radiation type nav for detail slides */
+  .rad-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .rad-nav-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .rad-nav-btn.active, .rad-nav-btn:hover {
+    color: var(--text);
+    border-color: var(--rd-color);
+    background: rgba(255,255,255,0.05);
+  }
+
+  .context-note {
+    font-size: 13px;
+    color: var(--text-dim);
+    background: var(--panel);
+    border-left: 3px solid var(--accent-gamma);
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin-top: 12px;
+    line-height: 1.6;
+  }
+
+  .timer-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+    margin-bottom: 12px;
+    display: none;
+  }
+
+  .timer-fill {
+    height: 100%;
+    background: var(--accent-beta);
+    border-radius: 2px;
+    transition: width 1s linear;
+  }
+
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    flex: 1;
+  }
+
+  .match-col-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .match-item {
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+    border: 1px solid var(--border);
+    background: var(--panel);
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+    user-select: none;
+  }
+
+  .match-item.selected {
+    border-color: var(--accent-alpha);
+    background: rgba(0,198,255,0.08);
+    color: var(--accent-alpha);
+  }
+
+  .match-item.matched-correct {
+    border-color: var(--correct);
+    background: rgba(34,197,94,0.1);
+    color: var(--correct);
+    cursor: default;
+  }
+
+  .match-item.matched-wrong {
+    border-color: var(--wrong);
+    background: rgba(239,68,68,0.1);
+    color: var(--wrong);
+    cursor: default;
+    animation: shake 0.3s ease;
+  }
+
+  @keyframes shake {
+    0%,100%{ transform: translateX(0); }
+    25%{ transform: translateX(-6px); }
+    75%{ transform: translateX(6px); }
+  }
+
+  .rad-atom {
+    position: absolute;
+    right: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.06;
+    font-size: 160px;
+    pointer-events: none;
+    font-weight: 800;
+    color: var(--accent-gamma);
+  }
+
+  /* ── TITLE PAGE ── */
+  #slide-0 {
+    min-height: 520px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 48px 40px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+
+  .title-orbit {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.12;
+  }
+
+  .orbit-ring:nth-child(1) { width: 260px; height: 260px; border-color: var(--accent-alpha); animation: spin 18s linear infinite; }
+  .orbit-ring:nth-child(2) { width: 380px; height: 380px; border-color: var(--accent-beta); animation: spin 28s linear infinite reverse; }
+  .orbit-ring:nth-child(3) { width: 500px; height: 500px; border-color: var(--accent-gamma); animation: spin 40s linear infinite; }
+  .orbit-ring:nth-child(4) { width: 640px; height: 640px; border-color: var(--accent-neutron); animation: spin 55s linear infinite reverse; }
+
+  .orbit-dot {
+    position: absolute;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    top: -4px; left: 50%;
+    margin-left: -4px;
+  }
+
+  @keyframes spin { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+
+  .title-nucleus {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .nucleus-icon {
+    font-size: 56px;
+    margin-bottom: 20px;
+    animation: nucleusPulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(0,198,255,0.6));
+  }
+
+  @keyframes nucleusPulse {
+    0%,100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(0,198,255,0.6)); }
+    50% { transform: scale(1.08); filter: drop-shadow(0 0 32px rgba(168,85,247,0.8)); }
+  }
+
+  .title-course-code {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--accent-alpha);
+    margin-bottom: 14px;
+    border: 1px solid rgba(0,198,255,0.3);
+    padding: 5px 16px;
+    border-radius: 20px;
+    background: rgba(0,198,255,0.06);
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .title-main {
+    font-size: clamp(32px, 5vw, 52px);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -1px;
+    margin-bottom: 8px;
+    animation: fadeUp 0.8s 0.15s ease both;
+  }
+
+  .title-gradient {
+    background: linear-gradient(135deg, var(--accent-alpha) 0%, var(--accent-gamma) 50%, var(--accent-beta) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .title-subtitle {
+    font-size: 15px;
+    color: var(--text-dim);
+    max-width: 440px;
+    line-height: 1.6;
+    margin: 12px auto 32px;
+    animation: fadeUp 0.8s 0.3s ease both;
+  }
+
+  .title-meta {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 36px;
+    animation: fadeUp 0.8s 0.45s ease both;
+  }
+
+  .meta-pill {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--panel);
+    border: 1px solid var(--border);
+    padding: 6px 14px;
+    border-radius: 20px;
+  }
+
+  .meta-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .title-type-badges {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    animation: fadeUp 0.8s 0.55s ease both;
+  }
+
+  .type-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 6px;
+    border: 1px solid;
+    letter-spacing: 1px;
+  }
+
+  .badge-alpha { color: var(--accent-alpha); border-color: rgba(0,198,255,0.4); background: rgba(0,198,255,0.07); }
+  .badge-beta  { color: var(--accent-beta);  border-color: rgba(255,107,53,0.4); background: rgba(255,107,53,0.07); }
+  .badge-gamma { color: var(--accent-gamma); border-color: rgba(168,85,247,0.4); background: rgba(168,85,247,0.07); }
+  .badge-neutron { color: var(--accent-neutron); border-color: rgba(34,197,94,0.4); background: rgba(34,197,94,0.07); }
+
+  .title-start-btn {
+    animation: fadeUp 0.8s 0.7s ease both;
+    font-size: 15px;
+    padding: 14px 36px;
+    border-radius: 10px;
+  }
+
+  .title-start-btn::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-alpha), var(--accent-gamma));
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .title-start-btn:hover::after { opacity: 0.3; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .title-skip {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    animation: fadeUp 0.8s 0.9s ease both;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .title-skip:hover { color: var(--text); }
+
+  /* ── Transcript panel ── */
+  .transcript-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: var(--accent-alpha);
+    background: none;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 10px;
+  }
+  .transcript-toggle:hover { border-color: var(--accent-alpha); background: rgba(56,189,248,0.06); }
+  .transcript-panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--text-dim);
+    margin-bottom: 14px;
+    display: none;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .transcript-panel.open { display: block; }
+  .transcript-dl {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    text-decoration: underline;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 0;
+    margin-bottom: 14px;
+    display: block;
+  }
+  .transcript-dl:hover { color: var(--text); }
+
+  /* ── Summary table ── */
+  .summary-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    flex: 1;
+  }
+  .summary-table th {
+    background: var(--panel);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+  }
+  .summary-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+    color: var(--text);
+  }
+  .summary-table tr:last-child td { border-bottom: none; }
+  .summary-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .summary-table tr:hover td { background: rgba(255,255,255,0.04); }
+  .type-cell {
+    font-weight: 700;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .badge-sm {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    border: 1px solid;
+    letter-spacing: 1px;
+    margin-left: 6px;
+    vertical-align: middle;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+  <div class="progress-container">
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill" style="width:0%"></div>
+    </div>
+    <div class="progress-label" id="progressLabel">0 / 15</div>
+  </div>
+
+  <!-- SLIDE 0: Title Page -->
+  <div class="slide active" id="slide-0">
+    <div class="title-orbit">
+      <div class="orbit-ring"><div class="orbit-dot" style="background:var(--accent-alpha)"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot" style="background:var(--accent-beta)"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot" style="background:var(--accent-gamma)"></div></div>
+      <div class="orbit-ring"><div class="orbit-dot" style="background:var(--accent-neutron)"></div></div>
+    </div>
+    <div class="title-nucleus">
+      <div class="title-course-code">☢ &nbsp; Ionizing Radiation</div>
+      <div class="title-main">Types of<br><span class="title-gradient">Ionizing Radiation</span></div>
+      <p class="title-subtitle">Explore how radiation moves through matter, what makes each type unique, and why shielding matters.</p>
+      <div class="title-meta">
+        <div class="meta-pill"><div class="meta-dot" style="background:var(--accent-alpha)"></div>3 to 5 MIN</div>
+        <div class="meta-pill"><div class="meta-dot" style="background:var(--accent-gamma)"></div>INTERACTIVE</div>
+        <div class="meta-pill"><div class="meta-dot" style="background:var(--accent-neutron)"></div>QUIZ INCLUDED</div>
+      </div>
+      <div class="title-type-badges">
+        <div class="type-badge badge-alpha">α &nbsp;ALPHA</div>
+        <div class="type-badge badge-beta">β &nbsp;BETA</div>
+        <div class="type-badge badge-gamma">γ &nbsp;GAMMA</div>
+        <div class="type-badge badge-neutron">n &nbsp;NEUTRON</div>
+      </div>
+      <button class="btn btn-primary title-start-btn" onclick="goTo(1)" style="position:relative">Begin Lesson &nbsp;&rarr;</button>
+      <div class="title-skip" onclick="goTo(3)">Already know the basics? Skip to the types →</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 1: Title / Welcome -->
+  <div class="slide" id="slide-1">
+    <div class="rad-atom">☢</div>
+    <div class="slide-tag">Introduction to Radiation Science</div>
+    <h1>Types of<br>Ionizing Radiation</h1>
+    <p class="subtitle">A 3-minute interactive lesson exploring the four major types of ionizing radiation   their properties, penetrating power, and real-world significance.</p>
+    <div class="objectives">
+      <div class="obj-item"><div class="obj-check">✓</div>Identify the 4 main types of ionizing radiation</div>
+      <div class="obj-item"><div class="obj-check">✓</div>Describe the key properties of each type</div>
+      <div class="obj-item"><div class="obj-check">✓</div>Compare their penetrating and ionizing power</div>
+      <div class="obj-item"><div class="obj-check">✓</div>Recognize real-world sources and shielding methods</div>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(0)">&larr; Title Page</button>
+      <button class="btn btn-primary" onclick="goTo(2)">Start Lesson &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: What is Ionizing Radiation? -->
+  <div class="slide" id="slide-2">
+    <div class="slide-tag">Background</div>
+    <h2>What is Ionizing Radiation?</h2>
+    <p class="subtitle">Ionizing radiation carries enough energy to remove electrons from atoms   creating ions. This distinguishes it from non-ionizing radiation like visible light or radio waves.</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px">
+      <div class="stat-box">
+        <div class="stat-label">Minimum Energy</div>
+        <div class="stat-value" style="color:var(--accent-alpha)">~10 eV to ionize</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Key Effect</div>
+        <div class="stat-value" style="color:var(--accent-beta)">Breaks molecular bonds</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Types</div>
+        <div class="stat-value" style="color:var(--accent-gamma)">Particle &amp; Electromagnetic</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Primary Concern</div>
+        <div class="stat-value" style="color:var(--accent-neutron)">Biological damage to DNA</div>
+      </div>
+    </div>
+
+    <div class="context-note">
+      ⚛️ <strong>Two categories:</strong> <em>Particulate radiation</em> (alpha, beta, neutrons) consists of physical particles. <em>Electromagnetic radiation</em> (gamma, X-rays) consists of photons traveling at the speed of light. Both can ionize atoms, but they differ greatly in penetrating power and shielding requirements (World Health Organization [WHO], 2023).
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:10px;font-family:'Space Mono',monospace;">(WHO, 2023; National Cancer Institute [NCI], 2022)</p>
+
+    <div style="margin-top:14px;">
+      <button class="transcript-toggle" onclick="toggleTranscript()" aria-expanded="false" aria-controls="transcript-panel" id="transcript-btn">
+        &#128221; Show Text Version / Transcript
+      </button>
+      <div class="transcript-panel" id="transcript-panel" role="region" aria-label="Video transcript">
+        <strong style="color:var(--text);display:block;margin-bottom:8px;">&#x1F4CB; Transcript: Introduction to Ionizing Radiation</strong>
+        Welcome to this lesson on ionizing radiation. Ionizing radiation is energy released by atoms in the form of electromagnetic waves or particles. It carries enough energy to remove electrons from atoms, a process called ionization. This distinguishes it from non-ionizing radiation, such as visible light or radio waves, which lack the energy to ionize atoms.<br><br>
+        There are two broad categories. First, particulate radiation, which includes alpha particles, beta particles, and neutrons. These are physical particles with mass. Second, electromagnetic radiation, including gamma rays and X-rays, which are massless photons traveling at the speed of light.<br><br>
+        Ionizing radiation requires a minimum of approximately 10 electron volts to ionize an atom. Its primary biological concern is damage to DNA, which can lead to cell death, mutation, or cancer. Sources of ionizing radiation include natural background sources such as radon gas and cosmic rays, as well as artificial sources such as medical imaging equipment, nuclear reactors, and radiotherapy machines.<br><br>
+        <em style="color:var(--text-dim);font-size:12px;">Source: World Health Organization (2023); National Cancer Institute (2022)</em>
+      </div>
+      <button class="transcript-dl" onclick="downloadTranscript()" aria-label="Download transcript as text file">
+        &#11015; Download transcript (.txt)
+      </button>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(1)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goTo(3)">Explore Radiation Types &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Overview of 4 Types (clickable cards) -->
+  <div class="slide" id="slide-3">
+    <div class="slide-tag">Types Overview</div>
+    <h2>The Four Main Types</h2>
+    <div class="radiation-grid">
+      <div class="rad-card alpha" onclick="goTo(4)">
+        <span class="card-icon">⚫</span>
+        <div class="card-title">Alpha (α)</div>
+        <div class="card-symbol">PARTICLE RADIATION &middot; He4 NUCLEUS</div>
+        <div class="card-desc">Heaviest, most ionizing. Stopped by a sheet of paper or skin. Dangerous if inhaled or ingested.</div>
+      </div>
+      <div class="rad-card beta" onclick="goTo(5)">
+        <span class="card-icon">⚡</span>
+        <div class="card-title">Beta (β)</div>
+        <div class="card-symbol">PARTICLE RADIATION &middot; ELECTRON / POSITRON</div>
+        <div class="card-desc">Moderate penetration. Stopped by plastic, glass, or thin aluminum. Can cause skin burns.</div>
+      </div>
+      <div class="rad-card gamma" onclick="goTo(6)">
+        <span class="card-icon">🌊</span>
+        <div class="card-title">Gamma (γ)</div>
+        <div class="card-symbol">ELECTROMAGNETIC &middot; HIGH ENERGY PHOTON</div>
+        <div class="card-desc">Most penetrating. Requires dense lead or thick concrete to attenuate. Whole-body exposure risk.</div>
+      </div>
+      <div class="rad-card neutron" onclick="goTo(7)">
+        <span class="card-icon">🔵</span>
+        <div class="card-title">Neutron (n)</div>
+        <div class="card-symbol">PARTICLE RADIATION &middot; UNCHARGED</div>
+        <div class="card-desc">Highly penetrating, induces radioactivity. Shielded by hydrogen-rich materials (water, polyethylene).</div>
+      </div>
+    </div>
+    <div class="nav-row" style="margin-top:16px">
+      <button class="btn btn-ghost" onclick="goTo(2)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goTo(4)">Deep Dive: Alpha &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Alpha Detail -->
+  <div class="slide" id="slide-4">
+    <div class="rad-nav">
+      <button class="rad-nav-btn active" style="--rd-color:var(--accent-alpha);border-color:var(--accent-alpha);color:var(--accent-alpha)" onclick="goTo(4)">α Alpha</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-beta)" onclick="goTo(5)">β Beta</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-gamma)" onclick="goTo(6)">γ Gamma</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-neutron)" onclick="goTo(7)">n Neutron</button>
+    </div>
+    <div class="detail-header">
+      <div class="detail-icon-bg" style="background:rgba(0,198,255,0.1);border-color:var(--accent-alpha)">⚫</div>
+      <div>
+        <div class="slide-tag" style="color:var(--accent-alpha)">Alpha Radiation</div>
+        <h2 style="color:var(--accent-alpha)">Alpha (α) Particle</h2>
+        <p style="font-size:14px;color:var(--text-dim);line-height:1.5">Composed of 2 protons + 2 neutrons   identical to a helium-4 nucleus. Emitted by heavy nuclei like Uranium-238, Radium-226, and Polonium-210.</p>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="stat-box">
+        <div class="stat-label">Charge</div>
+        <div class="stat-value" style="color:var(--accent-alpha)">+2</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Mass (amu)</div>
+        <div class="stat-value">~4</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Penetration</div>
+        <div class="stat-value" style="color:var(--correct)">Low</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Ionizing Power</div>
+        <div class="stat-value" style="color:var(--wrong)">Very High</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Speed</div>
+        <div class="stat-value">~5% of c</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Shield</div>
+        <div class="stat-value">Paper / Skin</div>
+      </div>
+    </div>
+    <div class="context-note">
+      🛡️ <strong>Hazard context:</strong> Although easily stopped externally, alpha emitters become extremely dangerous if <em>inhaled</em> or <em>ingested</em>   direct contact with sensitive tissue causes intense local ionization. Example: Radon gas in homes is a leading cause of lung cancer.
+    </div>
+    <div style="margin-top:12px;">
+      <button class="transcript-toggle" onclick="toggleT('alpha')" aria-expanded="false" aria-controls="t-alpha" id="tb-alpha">
+        &#128221; Show Transcript
+      </button>
+      <div class="transcript-panel" id="t-alpha" role="region" aria-label="Alpha radiation transcript">
+        <strong style="color:var(--text);display:block;margin-bottom:8px;">&#x1F4CB; Transcript: Alpha Radiation</strong>
+        Alpha radiation consists of alpha particles, each made up of two protons and two neutrons, making them identical in structure to a helium-4 nucleus. They are emitted by heavy radioactive nuclei such as Uranium-238, Radium-226, and Polonium-210.<br><br>
+        Because of their large mass and double positive charge, alpha particles interact very strongly with matter and are highly ionizing. However, this also means they lose energy very quickly, giving them very low penetrating power. Externally, alpha particles are stopped by just a sheet of paper or the outermost dead layer of skin and pose little hazard.<br><br>
+        The real danger arises when alpha-emitting substances are inhaled or ingested. Once inside the body, they deposit intense bursts of energy directly onto sensitive tissue such as the lungs or gastrointestinal tract, causing DNA strand breaks that dramatically raise cancer risk. A well-known example is radon-222, a naturally occurring alpha emitter and the leading cause of lung cancer in non-smokers, responsible for approximately 21,000 deaths per year in the United States. Another example is the 2006 poisoning of Alexander Litvinenko with Polonium-210, an alpha emitter that was undetectable by standard security measures but caused fatal internal radiation injury once ingested.<br><br>
+        <em style="color:var(--text-dim);font-size:12px;">Sources: Bushberg et al. (2021); EPA (2023); NCI (2022); Goldfarb &amp; Litvinenko (2007)</em>
+      </div>
+      <button class="transcript-dl" onclick="downloadT('alpha')" aria-label="Download alpha transcript">&#11015; Download transcript (.txt)</button>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(3)">&larr; All Types</button>
+      <button class="btn btn-primary" onclick="goTo(5)">Beta Radiation &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Beta Detail -->
+  <div class="slide" id="slide-5">
+    <div class="rad-nav">
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-alpha)" onclick="goTo(4)">&alpha; Alpha</button>
+      <button class="rad-nav-btn active" style="--rd-color:var(--accent-beta);border-color:var(--accent-beta);color:var(--accent-beta)" onclick="goTo(5)">&beta; Beta</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-gamma)" onclick="goTo(6)">&gamma; Gamma</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-neutron)" onclick="goTo(7)">n Neutron</button>
+    </div>
+    <div class="detail-header">
+      <div class="detail-icon-bg" style="background:rgba(255,107,53,0.1);border-color:var(--accent-beta)">&#9889;</div>
+      <div>
+        <div class="slide-tag" style="color:var(--accent-beta)">Beta Radiation</div>
+        <h2 style="color:var(--accent-beta)">Beta (&beta;) Particle</h2>
+        <p style="font-size:14px;color:var(--text-dim);line-height:1.5">High-speed electrons (&beta;&#8315;) or positrons (&beta;&#8314;) emitted during nuclear decay. Sources include Carbon-14, Strontium-90, and Iodine-131 (Bushberg et al., 2021).</p>
+      </div>
+    </div>
+    <div class="detail-grid" style="grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+      <div class="stat-box">
+        <div class="stat-label">Charge</div>
+        <div class="stat-value" style="color:var(--accent-beta)">&#8722;1 or +1</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Penetration</div>
+        <div class="stat-value" style="color:var(--accent-beta)">Moderate (skin and tissue)</div>
+      </div>
+    </div>
+    <div class="context-note" style="margin-bottom:10px;">
+      🩹 <strong>Health Effects:</strong> Beta particles can penetrate the outer skin layers and reach living tissue beneath, causing radiation burns, cataracts with prolonged eye exposure, and increased lifetime risk of leukemia and solid cancers with sufficient dose. Strontium-90, a fission product released during nuclear weapons testing and reactor accidents, mimics calcium and accumulates in bone tissue, irradiating bone marrow and elevating risk of bone cancer and leukemia (United Nations Scientific Committee on the Effects of Atomic Radiation [UNSCEAR], 2020).
+    </div>
+    <div class="context-note">
+      &#127973; <strong>Real-World Example and Medical Use:</strong> Following the 1986 Chernobyl disaster, widespread environmental contamination with Iodine-131 (a beta emitter) caused a dramatic rise in thyroid cancer among children in Ukraine and Belarus (WHO, 2006). Today, that same property is harnessed therapeutically: Iodine-131 is administered orally to selectively destroy cancerous thyroid tissue in patients with thyroid cancer, illustrating how beta radiation serves both as a hazard and a medical tool (NCI, 2022).
+    </div>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:8px;font-family:'Space Mono',monospace;">(Bushberg et al., 2021; UNSCEAR, 2020; WHO, 2006; NCI, 2022)</p>
+    <div style="margin-top:12px;">
+      <button class="transcript-toggle" onclick="toggleT('beta')" aria-expanded="false" aria-controls="t-beta" id="tb-beta">
+        &#128221; Show Transcript
+      </button>
+      <div class="transcript-panel" id="t-beta" role="region" aria-label="Beta radiation transcript">
+        <strong style="color:var(--text);display:block;margin-bottom:8px;">&#x1F4CB; Transcript: Beta Radiation</strong>
+        Beta radiation consists of high-speed electrons, called beta-minus particles, or positrons, called beta-plus particles, emitted during nuclear decay. Common sources include Carbon-14, Strontium-90, and Iodine-131.<br><br>
+        Beta particles have moderate penetrating power. They can pass through the outer skin layers and reach living tissue beneath. Health effects of beta exposure include radiation burns on the skin, an increased risk of cataracts with prolonged eye exposure, and an elevated lifetime risk of leukemia and solid tumours with sufficient dose. Strontium-90, a fission product released during nuclear weapons testing and reactor accidents, is particularly hazardous because it mimics calcium in the body and accumulates in bone tissue, irradiating the bone marrow and raising the risk of bone cancer and leukemia.<br><br>
+        Following the 1986 Chornobyl disaster, widespread environmental contamination with Iodine-131, a beta emitter, caused a dramatic rise in thyroid cancer among children in Ukraine and Belarus. This happened because the thyroid gland naturally absorbs iodine and concentrated the radioactive isotope internally. That same property is now used therapeutically: Iodine-131 is administered orally to selectively destroy cancerous thyroid tissue in patients with thyroid cancer, illustrating how beta radiation can be both a hazard and a powerful medical tool.<br><br>
+        <em style="color:var(--text-dim);font-size:12px;">Sources: Bushberg et al. (2021); UNSCEAR (2020); WHO (2006); NCI (2022)</em>
+      </div>
+      <button class="transcript-dl" onclick="downloadT('beta')" aria-label="Download beta transcript">&#11015; Download transcript (.txt)</button>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(4)">&larr; Alpha</button>
+      <button class="btn btn-primary" onclick="goTo(6)">Gamma Radiation &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Gamma Detail -->
+  <div class="slide" id="slide-6">
+    <div class="rad-nav">
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-alpha)" onclick="goTo(4)">α Alpha</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-beta)" onclick="goTo(5)">β Beta</button>
+      <button class="rad-nav-btn active" style="--rd-color:var(--accent-gamma);border-color:var(--accent-gamma);color:var(--accent-gamma)" onclick="goTo(6)">γ Gamma</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-neutron)" onclick="goTo(7)">n Neutron</button>
+    </div>
+    <div class="detail-header">
+      <div class="detail-icon-bg" style="background:rgba(168,85,247,0.1);border-color:var(--accent-gamma)">🌊</div>
+      <div>
+        <div class="slide-tag" style="color:var(--accent-gamma)">Gamma Radiation</div>
+        <h2 style="color:var(--accent-gamma)">Gamma (γ) Ray</h2>
+        <p style="font-size:14px;color:var(--text-dim);line-height:1.5">High-energy electromagnetic photons emitted from excited nuclei after alpha or beta decay. Sources: Cobalt-60, Cesium-137, naturally occurring K-40.</p>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="stat-box">
+        <div class="stat-label">Charge</div>
+        <div class="stat-value" style="color:var(--accent-gamma)">0 (photon)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Mass</div>
+        <div class="stat-value">0 (massless)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Penetration</div>
+        <div class="stat-value" style="color:var(--wrong)">Very High</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Ionizing Power</div>
+        <div class="stat-value" style="color:var(--correct)">Low to Moderate</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Speed</div>
+        <div class="stat-value">Speed of light</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Shield</div>
+        <div class="stat-value">Lead / Concrete</div>
+      </div>
+    </div>
+    <div class="context-note">
+      ☢️ <strong>Key insight:</strong> Gamma rays pass through the human body easily, making external exposure a whole-body hazard. Because they have no charge or mass, they are harder to stop than particles   requiring dense materials like lead for effective shielding.
+    </div>
+    <div style="margin-top:12px;">
+      <button class="transcript-toggle" onclick="toggleT('gamma')" aria-expanded="false" aria-controls="t-gamma" id="tb-gamma">
+        &#128221; Show Transcript
+      </button>
+      <div class="transcript-panel" id="t-gamma" role="region" aria-label="Gamma radiation transcript">
+        <strong style="color:var(--text);display:block;margin-bottom:8px;">&#x1F4CB; Transcript: Gamma Radiation</strong>
+        Gamma rays are high-energy electromagnetic photons emitted from excited atomic nuclei following alpha or beta decay. Unlike alpha and beta radiation, gamma rays have no mass and no charge. Common sources include Cobalt-60, Cesium-137, and naturally occurring Potassium-40.<br><br>
+        Because gamma rays travel at the speed of light and have no charge, they interact weakly with matter and can penetrate deeply through the entire human body. This makes them a whole-body hazard during external exposure, as they irradiate all organs simultaneously. Shielding requires dense, high-atomic-number materials such as lead bricks or thick concrete.<br><br>
+        At high acute doses, gamma exposure causes Acute Radiation Syndrome, or ARS, with symptoms progressing from nausea and hair loss to bone marrow failure, haemorrhage, and death. Even moderate long-term exposure significantly increases the risk of leukemia, thyroid cancer, and other solid tumours. The latency period for radiation-induced cancers ranges from a few years for leukemia to several decades for solid tumours.<br><br>
+        A key real-world example is the 1987 Goiania accident in Brazil, in which an abandoned Cesium-137 radiotherapy machine was broken open by scavengers who were attracted by the blue glow of the gamma-emitting material. Four people died from ARS and approximately 249 others were contaminated, making this one of the worst radiological accidents outside of a nuclear facility.<br><br>
+        <em style="color:var(--text-dim);font-size:12px;">Sources: Bushberg et al. (2021); UNSCEAR (2020); WHO (2023); IAEA (1988)</em>
+      </div>
+      <button class="transcript-dl" onclick="downloadT('gamma')" aria-label="Download gamma transcript">&#11015; Download transcript (.txt)</button>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(5)">&larr; Beta</button>
+      <button class="btn btn-primary" onclick="goTo(7)">Neutron Radiation &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 7: Neutron Detail -->
+  <div class="slide" id="slide-7">
+    <div class="rad-nav">
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-alpha)" onclick="goTo(4)">α Alpha</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-beta)" onclick="goTo(5)">β Beta</button>
+      <button class="rad-nav-btn" style="--rd-color:var(--accent-gamma)" onclick="goTo(6)">γ Gamma</button>
+      <button class="rad-nav-btn active" style="--rd-color:var(--accent-neutron);border-color:var(--accent-neutron);color:var(--accent-neutron)" onclick="goTo(7)">n Neutron</button>
+    </div>
+    <div class="detail-header">
+      <div class="detail-icon-bg" style="background:rgba(34,197,94,0.1);border-color:var(--accent-neutron)">🔵</div>
+      <div>
+        <div class="slide-tag" style="color:var(--accent-neutron)">Neutron Radiation</div>
+        <h2 style="color:var(--accent-neutron)">Neutron (n)</h2>
+        <p style="font-size:14px;color:var(--text-dim);line-height:1.5">Electrically neutral particles emitted during fission reactions and in nuclear reactors. Neutrons can make stable materials radioactive through neutron activation.</p>
+      </div>
+    </div>
+    <div class="detail-grid">
+      <div class="stat-box">
+        <div class="stat-label">Charge</div>
+        <div class="stat-value" style="color:var(--accent-neutron)">0 (neutral)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Mass (amu)</div>
+        <div class="stat-value">~1</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Penetration</div>
+        <div class="stat-value" style="color:var(--wrong)">Very High</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Ionizing Power</div>
+        <div class="stat-value" style="color:var(--wrong)">High (indirect)</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Source</div>
+        <div class="stat-value">Reactors / Fission</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-label">Shield</div>
+        <div class="stat-value">Water / Paraffin</div>
+      </div>
+    </div>
+    <div class="context-note">
+      ⚡ <strong>Unique hazard:</strong> Because neutrons are electrically neutral, they pass through matter easily and interact with nuclei directly. This can cause <em>neutron activation</em>   converting stable materials into radioactive ones. Hydrogen-rich materials are the best shield because neutrons lose energy through elastic collisions with protons.
+    </div>
+    <div style="margin-top:12px;">
+      <button class="transcript-toggle" onclick="toggleT('neutron')" aria-expanded="false" aria-controls="t-neutron" id="tb-neutron">
+        &#128221; Show Transcript
+      </button>
+      <div class="transcript-panel" id="t-neutron" role="region" aria-label="Neutron radiation transcript">
+        <strong style="color:var(--text);display:block;margin-bottom:8px;">&#x1F4CB; Transcript: Neutron Radiation</strong>
+        Neutron radiation consists of electrically neutral particles emitted during nuclear fission reactions, such as those occurring inside nuclear reactors. Because neutrons carry no charge, they are not repelled by the electrons or nuclei of atoms in the way that charged particles are, allowing them to penetrate deeply through almost any material.<br><br>
+        Neutron radiation is among the most biologically damaging forms of ionizing radiation. Inside the body, neutrons interact with hydrogen atoms in tissue water, generating secondary ionizing particles including protons and gamma rays that damage DNA. Neutron exposure can cause Acute Radiation Syndrome at high doses and carries a significantly elevated cancer risk. The relative biological effectiveness of neutrons, a measure of biological damage per unit of absorbed dose, can be up to 20 times greater than gamma rays, meaning even moderate neutron exposures can produce severe consequences.<br><br>
+        A unique additional hazard of neutron radiation is neutron activation: neutrons can be absorbed by stable, non-radioactive materials and convert them into radioactive isotopes. This is why structural materials inside nuclear reactors can themselves become radioactive over time.<br><br>
+        Hydrogen-rich materials such as water, paraffin wax, and polyethylene are the most effective shields for neutron radiation, because neutrons lose the most energy through elastic collisions with hydrogen nuclei, which have a similar mass. This is analogous to a billiard ball transferring maximum energy when it strikes another ball of equal mass.<br><br>
+        The 1999 Tokaimura criticality accident in Japan provides a sobering real-world example. Workers who improperly mixed uranium fuel triggered an uncontrolled fission chain reaction. The two nearest workers received lethal combined neutron and gamma doses and died from multiple organ failure after 82 and 210 days respectively.<br><br>
+        <em style="color:var(--text-dim);font-size:12px;">Sources: Bushberg et al. (2021); UNSCEAR (2020); IAEA (2000)</em>
+      </div>
+      <button class="transcript-dl" onclick="downloadT('neutron')" aria-label="Download neutron transcript">&#11015; Download transcript (.txt)</button>
+    </div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(6)">&larr; Gamma</button>
+      <button class="btn btn-primary" onclick="goTo(8)">Penetration Comparison &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: Penetration Diagram -->
+  <div class="slide" id="slide-8">
+    <div class="slide-tag">Visual Comparison</div>
+    <h2>Penetrating Power</h2>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:20px">How far each type travels through common shielding materials. More penetrating = harder to shield, but less ionizing per unit path.</p>
+
+    <div class="penetration-diagram" id="penDiagram">
+      <div class="pen-title">Shielding Effectiveness Comparison</div>
+
+      <div class="pen-row">
+        <div class="pen-label" style="color:var(--accent-alpha)">α Alpha</div>
+        <div class="pen-bar-container">
+          <div class="pen-bar" style="width:60px;background:var(--accent-alpha);">Paper</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-left:6px">Stopped by paper / dead skin cells</div>
+        </div>
+      </div>
+
+      <div class="pen-row">
+        <div class="pen-label" style="color:var(--accent-beta)">β Beta</div>
+        <div class="pen-bar-container">
+          <div class="pen-bar" style="width:60px;background:var(--accent-alpha);">Paper</div>
+          <div class="pen-bar" style="width:80px;background:var(--accent-beta);">Plastic</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-left:6px">Stopped by ~1 cm plastic or Al</div>
+        </div>
+      </div>
+
+      <div class="pen-row">
+        <div class="pen-label" style="color:var(--accent-gamma)">γ Gamma</div>
+        <div class="pen-bar-container">
+          <div class="pen-bar" style="width:60px;background:var(--accent-alpha);">Paper</div>
+          <div class="pen-bar" style="width:80px;background:var(--accent-beta);">Plastic</div>
+          <div class="pen-bar" style="width:90px;background:var(--accent-gamma);">Concrete</div>
+          <div class="pen-bar" style="width:70px;background:#6366f1;">Lead</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-left:6px">Requires dense lead/concrete</div>
+        </div>
+      </div>
+
+      <div class="pen-row">
+        <div class="pen-label" style="color:var(--accent-neutron)">n Neutron</div>
+        <div class="pen-bar-container">
+          <div class="pen-bar" style="width:60px;background:var(--accent-alpha);">Paper</div>
+          <div class="pen-bar" style="width:80px;background:var(--accent-beta);">Plastic</div>
+          <div class="pen-bar" style="width:90px;background:var(--accent-gamma);">Concrete</div>
+          <div class="pen-bar" style="width:100px;background:var(--accent-neutron);">Water/H₂</div>
+          <div style="font-size:11px;color:var(--text-dim);margin-left:6px">Requires H-rich materials</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+      <div style="text-align:center;padding:10px;background:var(--panel);border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:20px">⚫</div>
+        <div style="font-size:11px;color:var(--accent-alpha);font-weight:700;margin:4px 0">Alpha</div>
+        <div style="font-size:11px;color:var(--text-dim)">Highest ionizing<br>Lowest penetration</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:var(--panel);border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:20px">⚡</div>
+        <div style="font-size:11px;color:var(--accent-beta);font-weight:700;margin:4px 0">Beta</div>
+        <div style="font-size:11px;color:var(--text-dim)">Moderate ionizing<br>Moderate penetration</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:var(--panel);border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:20px">🌊</div>
+        <div style="font-size:11px;color:var(--accent-gamma);font-weight:700;margin:4px 0">Gamma</div>
+        <div style="font-size:11px;color:var(--text-dim)">Low ionizing<br>Very high penetration</div>
+      </div>
+      <div style="text-align:center;padding:10px;background:var(--panel);border-radius:8px;border:1px solid var(--border)">
+        <div style="font-size:20px">🔵</div>
+        <div style="font-size:11px;color:var(--accent-neutron);font-weight:700;margin:4px 0">Neutron</div>
+        <div style="font-size:11px;color:var(--text-dim)">High (indirect)<br>Very high penetration</div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(7)">&larr; Neutron</button>
+      <button class="btn btn-primary" onclick="goTo(9)">Matching Activity &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Matching Activity -->
+  <div class="slide" id="slide-9">
+    <div class="slide-tag">Interactive Activity</div>
+    <h2>Match the Radiation Type</h2>
+    <p style="font-size:14px;color:var(--text-dim);margin-bottom:16px">Click a property on the left, then click the correct radiation type on the right to match them.</p>
+
+    <div class="match-grid">
+      <div>
+        <div class="match-col-label">Property / Clue</div>
+        <div class="match-item" id="p1" onclick="selectLeft('p1','alpha')">Consists of 2 protons + 2 neutrons</div>
+        <div class="match-item" id="p2" onclick="selectLeft('p2','neutron')">Requires water or paraffin as shielding</div>
+        <div class="match-item" id="p3" onclick="selectLeft('p3','gamma')">Massless, travels at speed of light</div>
+        <div class="match-item" id="p4" onclick="selectLeft('p4','beta')">Can be a β⁻ or β⁺ particle</div>
+      </div>
+      <div>
+        <div class="match-col-label">Radiation Type</div>
+        <div class="match-item" id="r-alpha" onclick="selectRight('alpha')">⚫ Alpha (α)</div>
+        <div class="match-item" id="r-beta" onclick="selectRight('beta')">⚡ Beta (β)</div>
+        <div class="match-item" id="r-gamma" onclick="selectRight('gamma')">🌊 Gamma (γ)</div>
+        <div class="match-item" id="r-neutron" onclick="selectRight('neutron')">🔵 Neutron (n)</div>
+      </div>
+    </div>
+
+    <div id="matchFeedback" class="feedback-box" style="margin-top:12px;"></div>
+
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(8)">&larr; Back</button>
+      <button class="btn btn-primary" id="nextFromMatch" onclick="goTo(10)" disabled>Start Quiz &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Quiz Q1 -->
+  <div class="slide" id="slide-10">
+    <div class="slide-tag">Knowledge Check   Question 1 of 3</div>
+    <h2>Quick Quiz</h2>
+    <div class="quiz-question">
+      Which type of ionizing radiation has the highest ionizing power but the lowest penetrating ability?
+    </div>
+    <div class="quiz-options" id="q1-options">
+      <div class="quiz-option" onclick="answerQ(1,'a')"><span class="option-letter">A</span>Gamma (γ) ray</div>
+      <div class="quiz-option" onclick="answerQ(1,'b')"><span class="option-letter">B</span>Beta (β) particle</div>
+      <div class="quiz-option" onclick="answerQ(1,'c')"><span class="option-letter">C</span>Alpha (α) particle</div>
+      <div class="quiz-option" onclick="answerQ(1,'d')"><span class="option-letter">D</span>Neutron (n)</div>
+    </div>
+    <div class="feedback-box" id="q1-feedback"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(9)">&larr; Back</button>
+      <button class="btn btn-primary" id="q1-next" onclick="goTo(11)" disabled>Next Question &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 11: Quiz Q2 -->
+  <div class="slide" id="slide-11">
+    <div class="slide-tag">Knowledge Check   Question 2 of 3</div>
+    <h2>Quick Quiz</h2>
+    <div class="quiz-question">
+      A radiation worker is handling Cesium-137, which emits gamma rays. What is the MOST appropriate shielding material?
+    </div>
+    <div class="quiz-options" id="q2-options">
+      <div class="quiz-option" onclick="answerQ(2,'a')"><span class="option-letter">A</span>A sheet of paper</div>
+      <div class="quiz-option" onclick="answerQ(2,'b')"><span class="option-letter">B</span>A thin aluminum plate</div>
+      <div class="quiz-option" onclick="answerQ(2,'c')"><span class="option-letter">C</span>Lead bricks or thick concrete</div>
+      <div class="quiz-option" onclick="answerQ(2,'d')"><span class="option-letter">D</span>A plastic safety screen</div>
+    </div>
+    <div class="feedback-box" id="q2-feedback"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(10)">&larr; Back</button>
+      <button class="btn btn-primary" id="q2-next" onclick="goTo(12)" disabled>Next Question &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 12: Quiz Q3 -->
+  <div class="slide" id="slide-12">
+    <div class="slide-tag">Knowledge Check   Question 3 of 3</div>
+    <h2>Quick Quiz</h2>
+    <div class="quiz-question">
+      After the 1986 Chornobyl disaster, many children developed thyroid cancer due to exposure to Iodine-131. What type of radiation does Iodine-131 emit?
+    </div>
+    <div class="quiz-options" id="q3-options">
+      <div class="quiz-option" onclick="answerQ(3,'a')"><span class="option-letter">A</span>Alpha radiation</div>
+      <div class="quiz-option" onclick="answerQ(3,'b')"><span class="option-letter">B</span>Neutron radiation</div>
+      <div class="quiz-option" onclick="answerQ(3,'c')"><span class="option-letter">C</span>Beta radiation</div>
+      <div class="quiz-option" onclick="answerQ(3,'d')"><span class="option-letter">D</span>Gamma radiation</div>
+    </div>
+    <div class="feedback-box" id="q3-feedback"></div>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(11)">&larr; Back</button>
+      <button class="btn btn-primary" id="q3-next" onclick="goTo(13)" disabled>See Results &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 13: Quick-Reference Summary Table -->
+  <div class="slide" id="slide-13">
+    <div class="slide-tag">Quick Reference</div>
+    <h2>Summary: Four Types at a Glance</h2>
+    <p style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">Use this table to review key facts before a quiz or lab session (Bushberg et al., 2021; UNSCEAR, 2020).</p>
+    <table class="summary-table" role="table" aria-label="Ionizing radiation summary table">
+      <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Penetration</th>
+          <th scope="col">Ionizing Power</th>
+          <th scope="col">Shield</th>
+          <th scope="col">Real-World Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="type-cell" style="color:var(--accent-alpha);">
+            &#9899; Alpha
+            <span class="badge-sm" style="color:var(--accent-alpha);border-color:var(--accent-alpha);background:rgba(56,189,248,0.08);">&alpha;</span>
+          </td>
+          <td>Very low<br><span style="font-size:11px;color:var(--text-dim);">Stopped by paper or skin</span></td>
+          <td style="color:#f87171;font-weight:600;">Highest</td>
+          <td>Paper, dead skin cells</td>
+          <td>Polonium-210 poisoning of Alexander Litvinenko (2006); Radon gas in homes</td>
+        </tr>
+        <tr>
+          <td class="type-cell" style="color:var(--accent-beta);">
+            &#9889; Beta
+            <span class="badge-sm" style="color:var(--accent-beta);border-color:var(--accent-beta);background:rgba(251,146,60,0.08);">&beta;</span>
+          </td>
+          <td>Moderate<br><span style="font-size:11px;color:var(--text-dim);">Penetrates skin into tissue</span></td>
+          <td style="color:var(--accent-beta);font-weight:600;">Moderate</td>
+          <td>Plastic, aluminum sheet</td>
+          <td>Chornobyl Iodine-131 contamination; thyroid cancer in children (1986)</td>
+        </tr>
+        <tr>
+          <td class="type-cell" style="color:var(--accent-gamma);">
+            &#127754; Gamma
+            <span class="badge-sm" style="color:var(--accent-gamma);border-color:var(--accent-gamma);background:rgba(192,132,252,0.08);">&gamma;</span>
+          </td>
+          <td>Very high<br><span style="font-size:11px;color:var(--text-dim);">Penetrates entire body</span></td>
+          <td style="color:var(--accent-neutron);font-weight:600;">Low to Moderate</td>
+          <td>Lead bricks, thick concrete</td>
+          <td>Goiania Cesium-137 accident, Brazil; 4 deaths, 249 contaminated (1987)</td>
+        </tr>
+        <tr>
+          <td class="type-cell" style="color:var(--accent-neutron);">
+            &#128309; Neutron
+            <span class="badge-sm" style="color:var(--accent-neutron);border-color:var(--accent-neutron);background:rgba(74,222,128,0.08);">n</span>
+          </td>
+          <td>Very high<br><span style="font-size:11px;color:var(--text-dim);">Whole-body penetration</span></td>
+          <td style="color:#f87171;font-weight:600;">High (indirect)</td>
+          <td>Water, paraffin, polyethylene</td>
+          <td>Tokaimura criticality accident, Japan; 2 fatal cases of ARS (1999)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-size:11px;color:var(--text-dim);margin-top:10px;font-family:'Space Mono',monospace;">(Bushberg et al., 2021; UNSCEAR, 2020; EPA, 2023; IAEA, 1988, 2000)</p>
+    <div class="nav-row">
+      <button class="btn btn-ghost" onclick="goTo(12)">&larr; Back</button>
+      <button class="btn btn-primary" onclick="goTo(15)">Quiz Results &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 14: Score / Summary (was 13) -->
+  <div class="slide" id="slide-14">
+    <div class="slide-tag">Lesson Complete</div>
+    <h2 style="text-align:center">Results</h2>
+    <div class="score-display" id="finalScore">0/3</div>
+    <div class="score-bar-container">
+      <div class="score-item">
+        <div class="score-num" id="correctCount" style="color:var(--correct)">0</div>
+        <div class="score-desc">Correct</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num" id="incorrectCount" style="color:var(--wrong)">0</div>
+        <div class="score-desc">Incorrect</div>
+      </div>
+      <div class="score-item">
+        <div class="score-num" id="percentScore" style="color:var(--accent-alpha)">0%</div>
+        <div class="score-desc">Score</div>
+      </div>
+    </div>
+    <div class="context-note" id="summaryMessage">
+      You've completed the Types of Ionizing Radiation lesson. Review the material and retake the quiz to improve your score.
+    </div>
+    <div class="nav-row" style="margin-top:20px;justify-content:center;gap:16px">
+      <button class="btn btn-ghost" onclick="restartLesson()">&#8635; Restart Lesson</button>
+      <button class="btn btn-ghost" onclick="goTo(3)">&#8617; Review Types</button>
+      <button class="btn btn-primary" onclick="goTo(15)">References &rarr;</button>
+    </div>
+  </div>
+
+  <!-- SLIDE 14: APA References -->
+  <div class="slide" id="slide-15">
+    <div class="slide-tag">Sources</div>
+    <h2>APA References</h2>
+    <div style="overflow-y:auto;max-height:360px;padding-right:8px;">
+      <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:24px 28px;">
+        <p style="font-family:'Space Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--accent-alpha);margin-bottom:20px;text-transform:uppercase;">APA 7th Edition</p>
+
+        <div style="font-size:13px;line-height:2;color:var(--text-dim);">
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            Bushberg, J. T., Seibert, J. A., Leidholdt, E. M., Jr., &amp; Boone, J. M. (2021). <em>The essential physics of medical imaging</em> (4th ed.). Wolters Kluwer.
+          </p>
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            Goldfarb, A., &amp; Litvinenko, M. (2007). <em>Death of a dissident: The poisoning of Alexander Litvinenko and the return of the KGB</em>. Free Press.
+          </p>
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            International Atomic Energy Agency. (1988). <em>The radiological accident in Goiania</em>. IAEA. <a href="https://www.iaea.org/publications/3588/the-radiological-accident-in-goiania" target="_blank" style="color:var(--accent-alpha);">https://www.iaea.org/publications/3588/the-radiological-accident-in-goiania</a>
+          </p>
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            International Atomic Energy Agency. (2000). <em>The radiological accident in Tokaimura</em>. IAEA. <a href="https://www.iaea.org/publications/5957/the-radiological-accident-in-tokaimura" target="_blank" style="color:var(--accent-alpha);">https://www.iaea.org/publications/5957/the-radiological-accident-in-tokaimura</a>
+          </p>
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            National Cancer Institute. (2022). <em>Radiation therapy to treat cancer</em>. U.S. National Institutes of Health. <a href="https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy" target="_blank" style="color:var(--accent-alpha);">https://www.cancer.gov/about-cancer/treatment/types/radiation-therapy</a>
+          </p>
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            United Nations Scientific Committee on the Effects of Atomic Radiation. (2020). <em>UNSCEAR 2020/2021 report: Sources, effects and risks of ionizing radiation</em> (Vol. I). United Nations. <a href="https://www.unscear.org/unscear/en/publications/2020_2021_1.html" target="_blank" style="color:var(--accent-alpha);">https://www.unscear.org/unscear/en/publications/2020_2021_1.html</a>
+          </p>
+
+          <p style="margin-bottom:14px;padding-left:2em;text-indent:-2em;">
+            U.S. Environmental Protection Agency. (2023). <em>Health risk of radon</em>. EPA. <a href="https://www.epa.gov/radon/health-risk-radon" target="_blank" style="color:var(--accent-alpha);">https://www.epa.gov/radon/health-risk-radon</a>
+          </p>
+
+          <p style="padding-left:2em;text-indent:-2em;">
+            World Health Organization. (2023). <em>Ionizing radiation and health effects</em>. WHO. <a href="https://www.who.int/news-room/fact-sheets/detail/ionizing-radiation-and-health-effects" target="_blank" style="color:var(--accent-alpha);">https://www.who.int/news-room/fact-sheets/detail/ionizing-radiation-and-health-effects</a>
+          </p>
+
+        </div>
+      </div>
+    </div>
+    <div class="nav-row" style="margin-top:16px;">
+      <button class="btn btn-ghost" onclick="goTo(14)">&larr; Results</button>
+      <button class="btn btn-primary" onclick="restartLesson()">&#8635; Restart Lesson</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  const TOTAL_SLIDES = 16;
+  let quizAnswers = { 1: null, 2: null, 3: null };
+  let quizCorrect = { 1: 'c', 2: 'c', 3: 'c' };
+  let quizFeedback = {
+    1: {
+      c: "✅ Correct! Alpha particles are the most ionizing   their large mass and double charge cause intense interactions   but they are stopped by just a sheet of paper or the outer layer of skin.",
+      wrong: "❌ Not quite. Alpha (α) particles have the highest ionizing power because of their large mass (+2 charge), yet are stopped by paper or skin. They cannot penetrate deeply."
+    },
+    2: {
+      c: "✅ Correct! Gamma rays are highly penetrating electromagnetic radiation. Dense, high-atomic-number materials like lead or thick concrete are required to significantly attenuate them.",
+      wrong: "❌ Incorrect. Gamma rays pass easily through paper, plastic, and aluminum. Only dense materials like lead bricks or thick concrete can provide effective shielding."
+    },
+    3: {
+      c: "✅ Correct! Iodine-131 is a beta emitter. After Chornobyl, it was released into the environment and absorbed by the thyroid gland, causing thyroid cancer in thousands of children across Ukraine and Belarus (WHO, 2006).",
+      wrong: "❌ Not quite. Iodine-131 emits beta radiation. The thyroid gland naturally absorbs iodine, which caused it to accumulate this radioactive isotope after the Chornobyl disaster, leading to a rise in thyroid cancer in children (WHO, 2006)."
+    }
+  };
+
+  let matchSelectedLeft = null;
+  let matchCorrectAnswer = null;
+  let matchedCount = 0;
+
+  function goTo(n) {
+    document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+    document.getElementById('slide-' + n).classList.add('active');
+    updateProgress(n);
+    if (n === 14) calcScore();
+  }
+
+  function updateProgress(n) {
+    const pct = Math.round((n / (TOTAL_SLIDES - 1)) * 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressLabel').textContent = n + ' / 15';
+  }
+
+  function answerQ(qNum, chosen) {
+    if (quizAnswers[qNum] !== null) return;
+    quizAnswers[qNum] = chosen;
+
+    const options = document.querySelectorAll('#q' + qNum + '-options .quiz-option');
+    const letters = ['a','b','c','d'];
+    const correct = quizCorrect[qNum];
+    const isCorrect = chosen === correct;
+
+    options.forEach((opt, i) => {
+      opt.classList.add('disabled');
+      if (letters[i] === correct) opt.classList.add('correct');
+      else if (letters[i] === chosen && !isCorrect) opt.classList.add('wrong');
+    });
+
+    const fb = document.getElementById('q' + qNum + '-feedback');
+    fb.classList.add('show');
+    if (isCorrect) {
+      fb.classList.add('correct-fb');
+      fb.textContent = quizFeedback[qNum][correct];
+    } else {
+      fb.classList.add('wrong-fb');
+      fb.textContent = quizFeedback[qNum].wrong;
+    }
+    document.getElementById('q' + qNum + '-next').disabled = false;
+  }
+
+  function calcScore() {
+    let correct = 0;
+    for (let i = 1; i <= 3; i++) {
+      if (quizAnswers[i] === quizCorrect[i]) correct++;
+    }
+    const pct = Math.round((correct / 3) * 100);
+    document.getElementById('finalScore').textContent = correct + '/3';
+    document.getElementById('correctCount').textContent = correct;
+    document.getElementById('incorrectCount').textContent = 3 - correct;
+    document.getElementById('percentScore').textContent = pct + '%';
+
+    const msg = document.getElementById('summaryMessage');
+    if (pct === 100) {
+      msg.innerHTML = '🏆 <strong>Excellent!</strong> You achieved a perfect score! You have a solid grasp of the four types of ionizing radiation, their properties, and shielding requirements.';
+    } else if (pct >= 67) {
+      msg.innerHTML = '👍 <strong>Good work!</strong> You understand the core concepts. Review any questions you missed and consider re-reading the detail slides before retaking.';
+    } else {
+      msg.innerHTML = '📚 Keep studying! Review the Alpha, Beta, Gamma, and Neutron detail slides, then retake the quiz. Focus on comparing penetrating power and appropriate shielding materials.';
+    }
+  }
+
+  // Matching activity
+  function selectLeft(propId, answer) {
+    // If already matched, ignore
+    if (document.getElementById(propId).classList.contains('matched-correct')) return;
+    // Deselect other lefts
+    ['p1','p2','p3','p4'].forEach(id => {
+      if (!document.getElementById(id).classList.contains('matched-correct'))
+        document.getElementById(id).classList.remove('selected');
+    });
+    document.getElementById(propId).classList.add('selected');
+    matchSelectedLeft = { propId, answer };
+    matchCorrectAnswer = answer;
+  }
+
+  function selectRight(radType) {
+    if (!matchSelectedLeft) return;
+    const rEl = document.getElementById('r-' + radType);
+    if (rEl.classList.contains('matched-correct')) return;
+
+    const { propId, answer } = matchSelectedLeft;
+    const propEl = document.getElementById(propId);
+
+    if (radType === answer) {
+      propEl.classList.remove('selected');
+      propEl.classList.add('matched-correct');
+      rEl.classList.add('matched-correct');
+      matchSelectedLeft = null;
+      matchedCount++;
+
+      const fb = document.getElementById('matchFeedback');
+      fb.className = 'feedback-box show correct-fb';
+      fb.textContent = '✅ Correct match! ' + getMatchExplanation(answer);
+
+      if (matchedCount === 4) {
+        document.getElementById('nextFromMatch').disabled = false;
+        fb.textContent = '🎉 All matched correctly! You can proceed to the quiz.';
+      }
+    } else {
+      propEl.classList.add('matched-wrong');
+      rEl.classList.add('matched-wrong');
+      setTimeout(() => {
+        propEl.classList.remove('matched-wrong','selected');
+        rEl.classList.remove('matched-wrong');
+      }, 700);
+
+      const fb = document.getElementById('matchFeedback');
+      fb.className = 'feedback-box show wrong-fb';
+      fb.textContent = '❌ Incorrect. Try again! Think about the unique properties of each radiation type.';
+      matchSelectedLeft = null;
+    }
+  }
+
+  function getMatchExplanation(type) {
+    const expl = {
+      alpha: 'Alpha consists of 2 protons and 2 neutrons   identical to a helium-4 nucleus.',
+      neutron: 'Neutrons are best shielded by hydrogen-rich materials like water or paraffin wax.',
+      gamma: 'Gamma rays are massless photons traveling at the speed of light.',
+      beta: 'Beta particles are either electrons (β⁻) or positrons (β⁺).'
+    };
+    return expl[type] || '';
+  }
+
+  function restartLesson() {
+    quizAnswers = { 1: null, 2: null, 3: null };
+    matchSelectedLeft = null;
+    matchedCount = 0;
+
+    [1,2,3].forEach(q => {
+      const opts = document.querySelectorAll('#q' + q + '-options .quiz-option');
+      opts.forEach(o => o.className = 'quiz-option');
+      const fb = document.getElementById('q' + q + '-feedback');
+      fb.className = 'feedback-box';
+      fb.textContent = '';
+      document.getElementById('q' + q + '-next').disabled = true;
+    });
+
+    ['p1','p2','p3','p4'].forEach(id => {
+      document.getElementById(id).className = 'match-item';
+    });
+    ['alpha','beta','gamma','neutron'].forEach(r => {
+      document.getElementById('r-' + r).className = 'match-item';
+    });
+    document.getElementById('matchFeedback').className = 'feedback-box';
+    document.getElementById('nextFromMatch').disabled = true;
+
+    goTo(0);
+  }
+
+  function toggleTranscript() {
+    const panel = document.getElementById('transcript-panel');
+    const btn   = document.getElementById('transcript-btn');
+    const isOpen = panel.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen);
+    btn.textContent = isOpen
+      ? '\u{1F4CB} Hide Text Version / Transcript'
+      : '\u{1F4CB} Show Text Version / Transcript';
+  }
+
+  function downloadTranscript() {
+    const text = `TRANSCRIPT: Introduction to Ionizing Radiation
+Types of Ionizing Radiation Learning Activity
+
+Welcome to this lesson on ionizing radiation. Ionizing radiation is energy released by atoms in the form of electromagnetic waves or particles. It carries enough energy to remove electrons from atoms, a process called ionization. This distinguishes it from non-ionizing radiation, such as visible light or radio waves, which lack the energy to ionize atoms.
+
+There are two broad categories. First, particulate radiation, which includes alpha particles, beta particles, and neutrons. These are physical particles with mass. Second, electromagnetic radiation, including gamma rays and X-rays, which are massless photons traveling at the speed of light.
+
+Ionizing radiation requires a minimum of approximately 10 electron volts to ionize an atom. Its primary biological concern is damage to DNA, which can lead to cell death, mutation, or cancer. Sources of ionizing radiation include natural background sources such as radon gas and cosmic rays, as well as artificial sources such as medical imaging equipment, nuclear reactors, and radiotherapy machines.
+
+REFERENCES
+World Health Organization. (2023). Ionizing radiation and health effects. WHO.
+National Cancer Institute. (2022). Radiation therapy to treat cancer. U.S. National Institutes of Health.
+`;
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'ionizing_radiation_transcript.txt';
+    a.click();
+  }
+
+
+  const transcriptTexts = {
+    alpha:   `TRANSCRIPT: Alpha Radiation
+Types of Ionizing Radiation Learning Activity
+
+Alpha radiation consists of alpha particles, each made up of two protons and two neutrons, making them identical in structure to a helium-4 nucleus. They are emitted by heavy radioactive nuclei such as Uranium-238, Radium-226, and Polonium-210.
+
+Because of their large mass and double positive charge, alpha particles interact very strongly with matter and are highly ionizing. However, this also means they lose energy very quickly, giving them very low penetrating power. Externally, alpha particles are stopped by just a sheet of paper or the outermost dead layer of skin and pose little hazard.
+
+The real danger arises when alpha-emitting substances are inhaled or ingested. Once inside the body, they deposit intense bursts of energy directly onto sensitive tissue such as the lungs or gastrointestinal tract, causing DNA strand breaks that dramatically raise cancer risk. A well-known example is radon-222, a naturally occurring alpha emitter and the leading cause of lung cancer in non-smokers, responsible for approximately 21,000 deaths per year in the United States. Another example is the 2006 poisoning of Alexander Litvinenko with Polonium-210, an alpha emitter that was undetectable by standard security measures but caused fatal internal radiation injury once ingested.
+
+REFERENCES
+Bushberg, J. T., Seibert, J. A., Leidholdt, E. M., Jr., & Boone, J. M. (2021). The essential physics of medical imaging (4th ed.). Wolters Kluwer.
+EPA. (2023). Health risk of radon. U.S. Environmental Protection Agency.
+NCI. (2022). Radiation therapy to treat cancer. National Cancer Institute.
+Goldfarb, A., & Litvinenko, M. (2007). Death of a dissident. Free Press.`,
+    beta:    `TRANSCRIPT: Beta Radiation
+Types of Ionizing Radiation Learning Activity
+
+Beta radiation consists of high-speed electrons (beta-minus particles) or positrons (beta-plus particles) emitted during nuclear decay. Common sources include Carbon-14, Strontium-90, and Iodine-131.
+
+Beta particles have moderate penetrating power. They can pass through the outer skin layers and reach living tissue beneath. Health effects include radiation burns, an increased risk of cataracts with prolonged eye exposure, and elevated lifetime risk of leukemia and solid tumours with sufficient dose. Strontium-90 mimics calcium in the body and accumulates in bone tissue, raising the risk of bone cancer and leukemia.
+
+Following the 1986 Chornobyl disaster, Iodine-131 contamination caused a dramatic rise in thyroid cancer among children in Ukraine and Belarus. The thyroid gland naturally absorbs iodine and concentrated the radioactive isotope internally. Today, Iodine-131 is used therapeutically to destroy cancerous thyroid tissue.
+
+REFERENCES
+Bushberg, J. T., et al. (2021). The essential physics of medical imaging (4th ed.). Wolters Kluwer.
+UNSCEAR. (2020). Sources, effects and risks of ionizing radiation (Vol. I). United Nations.
+WHO. (2006). Health effects of the Chernobyl accident. World Health Organization.
+NCI. (2022). Radiation therapy to treat cancer. National Cancer Institute.`,
+    gamma:   `TRANSCRIPT: Gamma Radiation
+Types of Ionizing Radiation Learning Activity
+
+Gamma rays are high-energy electromagnetic photons emitted from excited atomic nuclei following alpha or beta decay. They have no mass and no charge. Common sources include Cobalt-60, Cesium-137, and naturally occurring Potassium-40.
+
+Because gamma rays travel at the speed of light and have no charge, they penetrate deeply through the entire human body, making them a whole-body hazard. Shielding requires dense materials such as lead bricks or thick concrete.
+
+At high acute doses, gamma exposure causes Acute Radiation Syndrome (ARS), with symptoms including nausea, hair loss, bone marrow failure, and potentially death. Long-term exposure raises the risk of leukemia and solid tumours.
+
+The 1987 Goiania accident in Brazil involved an abandoned Cesium-137 radiotherapy machine. Scavengers broke it open and were drawn to its blue glow. Four people died from ARS and 249 were contaminated.
+
+REFERENCES
+Bushberg, J. T., et al. (2021). The essential physics of medical imaging (4th ed.). Wolters Kluwer.
+UNSCEAR. (2020). Sources, effects and risks of ionizing radiation (Vol. I). United Nations.
+WHO. (2023). Ionizing radiation and health effects. World Health Organization.
+IAEA. (1988). The radiological accident in Goiania. International Atomic Energy Agency.`,
+    neutron: `TRANSCRIPT: Neutron Radiation
+Types of Ionizing Radiation Learning Activity
+
+Neutron radiation consists of electrically neutral particles emitted during nuclear fission. Because neutrons carry no charge, they penetrate deeply through almost any material.
+
+Neutron radiation is among the most biologically damaging forms of ionizing radiation. Inside the body, neutrons interact with hydrogen atoms generating secondary particles that damage DNA. The relative biological effectiveness of neutrons can be up to 20 times greater than gamma rays. Neutrons can also cause neutron activation, converting stable materials into radioactive isotopes.
+
+Hydrogen-rich materials such as water, paraffin wax, and polyethylene are the most effective shields for neutron radiation, because neutrons lose the most energy through elastic collisions with hydrogen nuclei.
+
+The 1999 Tokaimura criticality accident in Japan is a key example. Workers improperly mixing uranium fuel triggered an uncontrolled fission chain reaction. The two nearest workers received lethal doses and died from multiple organ failure.
+
+REFERENCES
+Bushberg, J. T., et al. (2021). The essential physics of medical imaging (4th ed.). Wolters Kluwer.
+UNSCEAR. (2020). Sources, effects and risks of ionizing radiation (Vol. I). United Nations.
+IAEA. (2000). The radiological accident in Tokaimura. International Atomic Energy Agency.`
+  };
+
+  function toggleT(id) {
+    const panel = document.getElementById('t-' + id);
+    const btn   = document.getElementById('tb-' + id);
+    const isOpen = panel.classList.toggle('open');
+    btn.setAttribute('aria-expanded', isOpen);
+    btn.textContent = isOpen ? '\u{1F4CB} Hide Transcript' : '\u{1F4CB} Show Transcript';
+  }
+
+  function downloadT(id) {
+    const text = transcriptTexts[id] || '';
+    const blob = new Blob([text], { type: 'text/plain' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = id + '_radiation_transcript.txt';
+    a.click();
+  }
+
+</script>
+</body>
+</html>
